@@ -7,6 +7,8 @@
 - Creación de bases de datos en MySQL utilizando phpMyAdmin.
 - Configuración de usuarios y permisos en MySQL.
 - Conexión de Django a una base de datos MySQL.
+### Link del commit:
+- https://github.com/altair3542/POO_avanzada/commit/fc0f7c01ad3cfdd60251e0c977287de7e77f198d
 
 ### Actividad:
 - Creación de una base de datos MySQL para el proyecto del curso.
