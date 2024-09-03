@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Categorías</title>
+</head>
+<body>
+    <h1>Lista de Categorías</h1>
+    <ul>
+        {% for categoria in categorias %}
+            <li>{{ categoria.nombre }} - <a href="{% url 'editar_categoria' categoria.pk %}">Editar</a> - <a href="{% url 'eliminar_categoria' categoria.pk %}">Eliminar</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'agregar_categoria' %}">Agregar una nueva categoría</a>
+    <br>
+    <a href="{% url 'inicio' %}">Volver al inicio</a>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Producto</title>
+</head>
+<body>
+    <h1>Eliminar Producto</h1>
+
+    <p>¿Estás seguro de que deseas eliminar el producto "{{ producto.nombre }}"?</p>
+
+    <!-- Formulario para confirmar la eliminación de un producto -->
+    <form method="post">
+        {% csrf_token %}
+        <!-- Token de protección contra CSRF -->
+
+        <button type="submit">Eliminar Producto</button>
+        <!-- Botón para confirmar y enviar la solicitud de eliminación -->
+    </form>
+
+    <!-- Enlace para volver a la lista de productos sin eliminar -->
+    <a href="{% url 'listar_productos' %}">Cancelar</a>
+</body>
+</html>

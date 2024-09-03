@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto</title>
+</head>
+<body>
+    <h1>Editar Producto</h1>
+
+    <!-- Formulario para editar un producto existente -->
+    <form method="post">
+        {% csrf_token %}
+        <!-- Token de protección contra CSRF -->
+
+        {{ form.as_p }}
+        <!-- Renderiza el formulario con los datos del producto existente -->
+
+        <button type="submit">Guardar Cambios</button>
+        <!-- Botón para enviar el formulario con las modificaciones -->
+    </form>
+
+    <!-- Enlace para volver a la lista de productos -->
+    <a href="{% url 'listar_productos' %}">Volver a la lista de productos</a>
+</body>
+</html>

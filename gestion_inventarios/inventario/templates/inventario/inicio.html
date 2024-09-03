@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Inicio</title>
+</head>
+<body>
+    <h1>Bienvenido a la Gestión de Inventarios</h1>
+    <ul>
+        <li><a href="{% url 'listar_productos' %}">Gestionar Productos</a></li>
+        <li><a href="{% url 'listar_categorias' %}">Gestionar Categorías</a></li>
+        <li><a href="{% url 'listar_proveedores' %}">Gestionar Proveedores</a></li>
+    </ul>
+</body>
+</html>

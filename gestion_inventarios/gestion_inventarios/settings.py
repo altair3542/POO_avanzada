@@ -76,14 +76,11 @@ WSGI_APPLICATION = 'gestion_inventarios.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'inventarios_db',
-        'USER': 'altair3542',   #ó el usuario que elegiste.
-        'PASSWORD': 'smesa3542', #ó la contraseña que elegiste.
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # Esto creará una base de datos SQLite en el directorio base del proyecto.
     }
 }
+
 
 
 # Password validation
