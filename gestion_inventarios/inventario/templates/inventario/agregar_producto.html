@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agregar Producto</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto</title>
 </head>
 <body>
-  <h1>Agregar producto</h1>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar producto</button>
-  </form>
-
-  <a href="{% url 'listar_productos' %}">Volver a la lista de productos.</a>
+    <h1>Agregar Producto</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ producto_form.as_p }}
+        <h2>Detalles del Producto</h2>
+        {{ detalle_form.as_p }}
+        <button type="submit">Guardar Producto</button>
+    </form>
+    <a href="{% url 'listar_productos' %}">Volver a la lista de productos</a>
 </body>
 </html>
+
