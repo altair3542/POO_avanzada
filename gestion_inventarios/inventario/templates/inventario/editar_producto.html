@@ -13,9 +13,9 @@
         {% csrf_token %}
         <!-- Token de protección contra CSRF -->
 
-        {{ form.as_p }}
+        {{ producto_form.as_p }}
         <!-- Renderiza el formulario con los datos del producto existente -->
-
+        {{ detalle_form.as_p }}
         <button type="submit">Guardar Cambios</button>
         <!-- Botón para enviar el formulario con las modificaciones -->
     </form>

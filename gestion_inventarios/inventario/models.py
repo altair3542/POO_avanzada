@@ -31,8 +31,7 @@ class Producto(models.Model):
     cantidad = models.IntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     descripcion = models.TextField()
-    detalleProducto = models.OneToOneField
-    #(DetalleProducto, on_delete=model.CASCADE)
+    detalleProducto = models.OneToOneField('DetalleProducto', on_delete=models.CASCADE, related_name='porducto_detalle', null=True)
 
     def __str__(self):
         return str(self.nombre)

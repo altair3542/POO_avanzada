@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
 <ul>
   {% for producto in productos %}
       <li>{{ producto.nombre }} - {{ producto.precio }}
@@ -7,6 +16,13 @@
               <li>Especificaciones: {{ producto.detalleproducto.especificaciones }}</li>
               <li>Fecha de Vencimiento: {{ producto.detalleproducto.fecha_vencimiento }}</li>
           </ul>
+            <br>
+            <strong>Etiquetas:</strong>
+            <ul>
+              {% for etiqueta in producto.etiquetas.all %}
+                <li>{{ etiqueta.name }}</li>
+              {% endfor %}
+            </ul>
           <a href="{% url 'editar_producto' producto.pk %}">Editar</a> -
           <a href="{% url 'eliminar_producto' producto.pk %}">Eliminar</a>
       </li>
@@ -15,4 +31,3 @@
 <a href="{% url 'agregar_producto' %}">Agregar un nuevo producto</a>
 <br>
 <a href="{% url 'inicio' %}">Volver al inicio</a>
-
