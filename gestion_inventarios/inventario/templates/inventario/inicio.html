@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio</title>
+    <title>Inicio - Gestión de Inventarios</title>
 </head>
 <body>
-    <h1>Bienvenido a la Gestión de Inventarios</h1>
+    <h1>Gestión de Inventarios</h1>
+
+    <h2>Opciones disponibles:</h2>
     <ul>
         <li><a href="{% url 'listar_productos' %}">Gestionar Productos</a></li>
         <li><a href="{% url 'listar_categorias' %}">Gestionar Categorías</a></li>
         <li><a href="{% url 'listar_proveedores' %}">Gestionar Proveedores</a></li>
+        <li><a href="{% url 'listar_clientes' %}">Gestionar Clientes</a></li> <!-- Nuevo enlace -->
+        <li><a href="{% url 'listar_ventas' %}">Ver Ventas Registradas</a></li>
+        <li><a href="{% url 'registrar_venta' %}">Registrar una Venta</a></li>
+        <li><a href="{% url 'reporte_ventas' %}">Generar Reporte de Ventas</a></li>
     </ul>
 </body>
 </html>

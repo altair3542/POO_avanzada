@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Ventas</title>
+</head>
+<body>
+  <h1>Lista de Ventas</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cliente</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+        <th>Fecha de venta</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for venta in ventas %}
+      <tr>
+        <td>{{ venta.producto.nombre }}</td>
+        <td>{{ venta.cliente.nombre }}</td>
+        <td>{{ venta.cantidad }}</td>
+        <td>{{ venta.total }}</td>
+        <td>{{ venta.fecha }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <br>
+  <!-- Enlace para registrar una nueva venta -->
+  <a href="{% url 'registrar_venta' %}">Registrar una nueva venta</a>
+
+  <br><br>
+  <!-- Enlace para volver al inicio -->
+  <a href="{% url 'inicio' %}">Volver al inicio</a>
+</body>
+</html>
+

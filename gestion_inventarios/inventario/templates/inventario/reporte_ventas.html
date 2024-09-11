@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte de Ventas</title>
+</head>
+<body>
+  <h1>Reporte de Ventas</h1>
+
+  <!-- Formulario de filtros para el reporte -->
+  <form method="GET">
+    <label for="fecha_inicio">Fecha de inicio</label>
+    <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ request.GET.fecha_inicio }}">
+
+    <label for="fecha_fin">Fecha de fin</label>
+    <input type="date" name="fecha_fin" id="fecha_fin" value="{{ request.GET.fecha_fin }}">
+
+    <label for="cliente_id">Cliente</label>
+    <select name="cliente_id">
+      <option value="">Todos los clientes</option>
+      {% for cliente in clientes %}
+        <option value="{{ cliente.id }}" {% if request.GET.cliente_id == cliente.id|stringformat:"s" %}selected{% endif %}>{{ cliente.nombre }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="producto_id">Producto</label>
+    <select name="producto_id">
+      <option value="">Todos los productos</option>
+      {% for producto in productos %}
+        <option value="{{ producto.id }}" {% if request.GET.producto_id == producto.id|stringformat:"s" %}selected{% endif %}>{{ producto.nombre }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">Generar Reporte</button>
+  </form>
+
+  <h2>Ventas Filtradas</h2>
+
+  <!-- Tabla de ventas filtradas -->
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Producto</th>
+        <th>Cliente</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for venta in ventas %}
+      <tr>
+        <td>{{ venta.fecha }}</td> <!-- Asegúrate de que el campo en el modelo sea 'fecha' -->
+        <td>{{ venta.producto.nombre }}</td>
+        <td>{{ venta.cliente.nombre }}</td>
+        <td>{{ venta.cantidad }}</td>
+        <td>{{ venta.total }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5">No se encontraron ventas.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Enlace para exportar el reporte filtrado -->
+  <a href="{% url 'exportar_reporte_ventas_csv' %}?fecha_inicio={{ request.GET.fecha_inicio }}&fecha_fin={{ request.GET.fecha_fin }}&cliente_id={{ request.GET.cliente_id }}&producto_id={{ request.GET.producto_id }}">
+    Exportar Reporte a CSV
+  </a>
+
+  <!-- Enlace para volver al inicio -->
+  <br><br>
+  <a href="{% url 'inicio' %}">Volver al inicio</a>
+
+</body>
+</html>
