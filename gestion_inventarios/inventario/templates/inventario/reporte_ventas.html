@@ -64,10 +64,27 @@
     </tbody>
   </table>
 
+  <h2>Ventas por producto</h2>
+  <img src="{url 'grafico_ventas'}" alt="Grafico de ventas">
+
   <!-- Enlace para exportar el reporte filtrado -->
   <a href="{% url 'exportar_reporte_ventas_csv' %}?fecha_inicio={{ request.GET.fecha_inicio }}&fecha_fin={{ request.GET.fecha_fin }}&cliente_id={{ request.GET.cliente_id }}&producto_id={{ request.GET.producto_id }}">
     Exportar Reporte a CSV
   </a>
+
+  <br>
+  <br>
+  
+  <a href="{% url 'exportar_reporte_ventas_excel' %}?fecha_inicio={{ request.GET.fecha_inicio }}&fecha_fin={{ request.GET.fecha_fin }}&cliente_id={{ request.GET.cliente_id }}&producto_id={{ request.GET.producto_id }}">
+    Exportar Reporte a Excel
+  </a>
+
+  <br>
+  <br>
+  <a href="{% url 'exportar_reporte_ventas_pdf' %}?fecha_inicio={{ request.GET.fecha_inicio }}&fecha_fin={{ request.GET.fecha_fin }}&cliente_id={{ request.GET.cliente_id }}&producto_id={{ request.GET.producto_id }}">
+    Exportar Reporte a PDF
+  </a>
+
 
   <!-- Enlace para volver al inicio -->
   <br><br>

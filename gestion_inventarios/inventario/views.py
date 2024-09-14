@@ -1,4 +1,12 @@
 import csv
+import openpyxl
+from reportlab.pdfgen import canvas
+import io
+from io import BytesIO
+import tempfile 
+from reportlab.lib.pagesizes import letter
+import matplotlib.pyplot as plt
+from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.dateparse import parse_date
 from django.http import HttpResponse
@@ -259,3 +267,98 @@ def eliminar_cliente(request, pk):
         cliente.delete()
         return redirect('listar_clientes')
     return render(request, 'inventario/eliminar_cliente.html', {'cliente': cliente})
+
+
+def exportar_reporte_ventas_excel(request):
+    # Crea un nuevo archivo de Excel
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = 'Reporte de Ventas'
+
+    # Añade encabezados a las columnas
+    ws.append(['Fecha', 'Producto', 'Cliente', 'Cantidad', 'Total'])
+
+    # Recupera todas las ventas
+    ventas = Ventas.objects.all().select_related('producto', 'cliente')
+
+    # Añade los datos de las ventas
+    for venta in ventas:
+        # Asegúrate de que la fecha esté en formato sin zona horaria
+        fecha_venta = venta.fecha_venta.replace(tzinfo=None) if venta.fecha_venta else None
+        ws.append([fecha_venta, venta.producto.nombre, venta.cliente.nombre, venta.cantidad, venta.total])
+
+    # Configura la respuesta para descargar el archivo Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=Reporte_Ventas.xlsx'
+
+    # Usa un buffer en memoria para evitar problemas con `wb.save(response)`
+    from io import BytesIO
+    buffer = BytesIO()
+    wb.save(buffer)
+    response.write(buffer.getvalue())
+
+    return response
+
+def exportar_reporte_ventas_pdf(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=Reporte_Ventas.pdf'
+
+    # Crea el objeto canvas
+    c = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
+
+    # Añade el título y los encabezados de las columnas
+    c.drawString(100, height - 100, 'Reporte de Ventas')
+    c.drawString(50, height - 130, 'Fecha')
+    c.drawString(150, height - 130, 'Producto')
+    c.drawString(300, height - 130, 'Cliente')
+    c.drawString(450, height - 130, 'Cantidad')
+    c.drawString(500, height - 130, 'Total')
+
+    # Recupera todas las ventas
+    ventas = Ventas.objects.all().select_related('producto', 'cliente')
+    y = height - 160
+
+    for venta in ventas:
+        c.drawString(50, y, str(venta.fecha_venta))
+        c.drawString(150, y, venta.producto.nombre)
+        c.drawString(300, y, venta.cliente.nombre)
+        c.drawString(450, y, str(venta.cantidad))
+        c.drawString(500, y, str(venta.total))
+        y -= 20
+
+    # Genera el gráfico
+    productos = Producto.objects.all()
+    cantidades = []
+    nombres_productos = []
+
+    for producto in productos:
+        total_cantidad = Ventas.objects.filter(producto=producto).aggregate(Sum('cantidad'))['cantidad__sum'] or 0
+        cantidades.append(total_cantidad)
+        nombres_productos.append(producto.nombre)
+
+    # Crea el gráfico y guárdalo en un buffer
+    plt.figure(figsize=(6, 4))
+    plt.bar(nombres_productos, cantidades, color='blue')
+    plt.xlabel('Producto')
+    plt.ylabel('Cantidad Vendida')
+    plt.title('Ventas por Producto')
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    plt.close()  # Cierra la figura para liberar memoria
+
+    # Guarda el gráfico en un archivo temporal
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
+        temp_file.write(buf.getvalue())
+        temp_file_path = temp_file.name
+
+    # Añade el gráfico al PDF
+    c.drawImage(temp_file_path, 100, 200, width=400, height=300)
+
+    # Finaliza el PDF
+    c.showPage()
+    c.save()
+
+    return response

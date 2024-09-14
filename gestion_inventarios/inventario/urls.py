@@ -3,7 +3,7 @@ from .views import (
     listar_productos, detalle_producto, agregar_producto, editar_producto, eliminar_producto,
     listar_categorias, agregar_categoria, editar_categoria, eliminar_categoria,
     listar_proveedores, agregar_proveedor, editar_proveedor, eliminar_proveedor,
-    inicio, listar_ventas, registrar_venta, reporte_ventas, exportar_reporte_ventas_csv,listar_clientes, agregar_cliente,editar_cliente,eliminar_cliente
+    inicio, listar_ventas, registrar_venta, reporte_ventas, exportar_reporte_ventas_csv,listar_clientes, agregar_cliente,editar_cliente,eliminar_cliente, exportar_reporte_ventas_excel, exportar_reporte_ventas_pdf
 )
 
 urlpatterns = [
@@ -37,4 +37,6 @@ urlpatterns = [
     path('ventas/registrar/', registrar_venta, name='registrar_venta'),
     path('ventas/reporte/', reporte_ventas, name='reporte_ventas'),
     path('ventas/reporte/exportar/', exportar_reporte_ventas_csv, name='exportar_reporte_ventas_csv'),
+    path('ventas/reporte/exportar-excel/', exportar_reporte_ventas_excel, name='exportar_reporte_ventas_excel'),
+    path('ventas/reporte/exportar-pdf/', exportar_reporte_ventas_pdf, name='exportar_reporte_ventas_pdf'),
 ]
