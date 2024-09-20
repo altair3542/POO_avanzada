@@ -3,13 +3,18 @@ import openpyxl
 from reportlab.pdfgen import canvas
 import io
 from io import BytesIO
-import tempfile 
+import tempfile
 from reportlab.lib.pagesizes import letter
 import matplotlib.pyplot as plt
 from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.dateparse import parse_date
 from django.http import HttpResponse
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import permission_required
+from allauth.account.signals import user_signed_up
+from django.dispatch import receiver
+from django.contrib.auth.models import Group
 from .models import Producto, Categoria, Proveedor, DetalleProducto, Ventas, Cliente
 from .forms import ProductoForm, CategoriaForm, ProveedorForm, DetalleProductoForm, ClienteForm, VentasForm
 
@@ -18,13 +23,30 @@ from .forms import ProductoForm, CategoriaForm, ProveedorForm, DetalleProductoFo
 def inicio(request):
     return render(request, 'inventario/inicio.html')
 
-def listar_productos(request):
-    # Obtiene todos los productos de la base de datos, incluyendo sus detalles relacionados,
-    # utilizando `prefetch_related` para optimizar la consulta y evitar múltiples consultas adicionales.
-    productos = Producto.objects.prefetch_related('detalleproducto').all()
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+        else:
+            return render(request, 'inventario/register.html', {'form': form})
+    else:
+        form = UserCreationForm()
+    return render(request, 'inventario/register.html', {'form': form})
 
-    # Renderiza la plantilla 'inventario/listar_productos.html' y pasa la lista de productos al contexto
-    # para que puedan ser utilizados dentro del template.
+@receiver(user_signed_up)
+def assign_user_group(sender, request, user, **kwargs):
+    group = Group.object.get(name='Usuarios Regulares')
+    user.groups.add(group)
+
+def my_view(request):
+    if not request.user.has_perm('inventario.view_producto'):
+        return redirect('no-access')
+
+@permission_required('inventario.view_producto', raise_exception=True)
+def listar_productos(request):
+    productos = Producto.objects.prefetch_related('detalleproducto').all()
     return render(request, 'inventario/listar_productos.html', {'productos': productos})
 
 def agregar_producto(request):
